@@ -285,7 +285,7 @@
 // 决定照片显示与否
 - (BOOL)isAssetCanSelect:(PHAsset *)asset;
 
-/// 根据用户设置的asset大小返回YES或NO   YES 不能选中  
+/// 根据用户设置的asset大小返回YES或NO   YES 不能选中
 - (BOOL)limitSizeAssetCanSelect:(TZAssetModel *)model;
 
 @end

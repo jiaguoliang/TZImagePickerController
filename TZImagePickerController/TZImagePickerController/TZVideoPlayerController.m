@@ -177,7 +177,7 @@
 
 - (void)doneButtonClick {
     TZImagePickerController *imagePickerVc = (TZImagePickerController *)self.navigationController;
-    if (imagePickerVc && imagePickerVc.delegate && [imagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
+    if (imagePickerVc && imagePickerVc.pickerDelegate && [imagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
         BOOL limit = [imagePickerVc.pickerDelegate limitSizeAssetCanSelect:_model];
         if (limit) {
             return;
