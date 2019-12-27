@@ -176,8 +176,15 @@
 }
 
 - (void)doneButtonClick {
+    TZImagePickerController *imagePickerVc = (TZImagePickerController *)self.navigationController;
+    if (imagePickerVc && imagePickerVc.delegate && [imagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
+        BOOL limit = [imagePickerVc.pickerDelegate limitSizeAssetCanSelect:_model];
+        if (limit) {
+            return;
+        }
+    }
+    
     if (self.navigationController) {
-        TZImagePickerController *imagePickerVc = (TZImagePickerController *)self.navigationController;
         if (imagePickerVc.autoDismiss) {
             [self.navigationController dismissViewControllerAnimated:YES completion:^{
                 [self callDelegateMethod];

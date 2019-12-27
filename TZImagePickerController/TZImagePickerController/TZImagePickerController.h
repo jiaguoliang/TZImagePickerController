@@ -135,6 +135,7 @@
 /// 默认是NO，如果设置为YES，导出视频时会修正转向（慎重设为YES，可能导致部分安卓下拍的视频导出失败）
 @property (assign, nonatomic) BOOL needFixComposition;
 
+
 /// The photos user have selected
 /// 用户选中过的图片数组
 @property (nonatomic, strong) NSMutableArray *selectedAssets;
@@ -283,6 +284,10 @@
 // Decide asset show or not't
 // 决定照片显示与否
 - (BOOL)isAssetCanSelect:(PHAsset *)asset;
+
+/// 根据用户设置的asset大小返回YES或NO   YES 不能选中  
+- (BOOL)limitSizeAssetCanSelect:(TZAssetModel *)model;
+
 @end
 
 

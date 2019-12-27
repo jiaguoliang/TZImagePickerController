@@ -567,9 +567,6 @@ static CGFloat itemMargin = 5;
             [UIView showOscillatoryAnimationWithLayer:strongLayer type:TZOscillatoryAnimationToSmaller];
         } else {
             // 2. select:check if over the maxImagesCount / 选择照片,检查是否超过了最大个数的限制
-            NSString *title = [NSString stringWithFormat:[NSBundle tz_localizedStringForKey:@"Select a maximum of %zd photos"], tzImagePickerVc.maxImagesCount];
-                           [tzImagePickerVc showAlertWithTitle:title];
-            
             if (tzImagePickerVc.selectedModels.count < tzImagePickerVc.maxImagesCount) {
                 if (tzImagePickerVc.maxImagesCount == 1 && !tzImagePickerVc.allowPreview) {
                     model.isSelected = YES;
@@ -577,6 +574,14 @@ static CGFloat itemMargin = 5;
                     [strongSelf doneButtonClick];
                     return;
                 }
+                
+                if (tzImagePickerVc.pickerDelegate && [tzImagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
+                    BOOL limit = [tzImagePickerVc.pickerDelegate limitSizeAssetCanSelect:model];
+                    if (limit) {
+                        return;
+                    }
+                }
+                
                 strongCell.selectPhotoButton.selected = YES;
                 model.isSelected = YES;
                 [tzImagePickerVc addSelectedModel:model];
@@ -589,11 +594,14 @@ static CGFloat itemMargin = 5;
                 NSString *title = [NSString stringWithFormat:[NSBundle tz_localizedStringForKey:@"Select a maximum of %zd photos"], tzImagePickerVc.maxImagesCount];
                 [tzImagePickerVc showAlertWithTitle:title];
             }
+            
+            NSString *title = [NSString stringWithFormat:[NSBundle tz_localizedStringForKey:@"Select a maximum of %zd photos"], tzImagePickerVc.maxImagesCount];
+                         [tzImagePickerVc showAlertWithTitle:title];
+            
         }
     };
     return cell;
 }
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     // take a photo / 去拍照
     TZImagePickerController *tzImagePickerVc = (TZImagePickerController *)self.navigationController;
@@ -625,6 +633,12 @@ static CGFloat itemMargin = 5;
             [self.navigationController pushViewController:gifPreviewVc animated:YES];
         }
     } else {
+         if (tzImagePickerVc.pickerDelegate && [tzImagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
+               BOOL limit = [tzImagePickerVc.pickerDelegate limitSizeAssetCanSelect:model];
+               if (limit) {
+                   return;
+               }
+         }
         TZPhotoPreviewController *photoPreviewVc = [[TZPhotoPreviewController alloc] init];
         photoPreviewVc.currentIndex = index;
         photoPreviewVc.models = _models;
