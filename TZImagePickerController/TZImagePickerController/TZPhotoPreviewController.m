@@ -300,6 +300,13 @@
 - (void)select:(UIButton *)selectButton {
     TZImagePickerController *_tzImagePickerVc = (TZImagePickerController *)self.navigationController;
     TZAssetModel *model = _models[self.currentIndex];
+    if (_tzImagePickerVc && _tzImagePickerVc.pickerDelegate && [_tzImagePickerVc.pickerDelegate respondsToSelector:@selector(limitSizeAssetCanSelect:)]) {
+           BOOL limit = [_tzImagePickerVc.pickerDelegate limitSizeAssetCanSelect:model];
+           if (limit) {
+               return;
+           }
+       }
+
     if (!selectButton.isSelected) {
         // 1. select:check if over the maxImagesCount / 选择照片,检查是否超过了最大个数的限制
         if (_tzImagePickerVc.selectedModels.count >= _tzImagePickerVc.maxImagesCount) {
