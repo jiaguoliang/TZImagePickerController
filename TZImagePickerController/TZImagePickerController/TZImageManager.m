@@ -511,8 +511,12 @@ static dispatch_once_t onceToken;
     CGImageDestinationRef destination = CGImageDestinationCreateWithURL((__bridge CFURLRef)tmpURL, kUTTypeJPEG, 1, NULL);
     CGImageDestinationAddImageFromSource(destination, source, 0, (__bridge CFDictionaryRef)meta);
     CGImageDestinationFinalize(destination);
-    CFRelease(source);
-    CFRelease(destination);
+    if (source != NULL) {
+        CFRelease(source);
+    }
+    if (destination != NULL) {
+        CFRelease(destination);
+    }
     
     __block NSString *localIdentifier = nil;
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
